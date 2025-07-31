@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useChatStore } from "@/stores/useChat";
 import { useUser } from "@clerk/clerk-react";
-import { AvatarImage } from "@radix-ui/react-avatar";
+
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { HeadphonesIcon, Users } from "lucide-react";
 import { useEffect } from "react";
@@ -12,9 +12,20 @@ const RightSlider = () => {
     const { users, fetchUsers, onlineUsers } = useChatStore();
 	const { user } = useUser();
 
+	
+
 	useEffect(() => {
-		if (user) fetchUsers();
-	}, [fetchUsers, user]);
+	fetchUsers();
+	
+
+	
+	}, [fetchUsers]);
+
+	console.log("ONLINE USERS:", onlineUsers)
+users.forEach(user => {
+  console.log("User:", user.fullName, "ClerkID:", user.clerkId, "Online?", onlineUsers.has(user.clerkId));
+});
+
 
 	return (
 		<div className='h-full bg-zinc-900 rounded-lg flex flex-col'>
@@ -31,7 +42,7 @@ const RightSlider = () => {
 				<div className='p-4 space-y-4'>
 					{users.map((user) => {
 					
-					
+					console.log("Rendering user:", user.fullName, "ClerkID:", user.clerkId, "Online:", onlineUsers.has(user.clerkId));
 						return (
 							<div
 								key={user._id}
@@ -40,7 +51,7 @@ const RightSlider = () => {
 								<div className='flex items-start gap-3'>
 									<div className='relative'>
 										<Avatar className='size-10 border border-zinc-800'>
-											<AvatarImage src={user.imageUrl} alt={user.fullName} />
+											
 											<AvatarFallback>{user.fullName[0]}</AvatarFallback>
 										</Avatar>
 										<div

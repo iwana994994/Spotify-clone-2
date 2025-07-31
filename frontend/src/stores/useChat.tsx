@@ -34,9 +34,12 @@ export const useChatStore=create<ChatStore>((set,get)=>({
     
    
 	fetchUsers: async () => {
+        console.log("📡 fetchUsers called"); // 
 		set({ isLoading: true, error: null });
 		try {
+            console.log("🌐 Pozivam backend za korisnike...");
 			const response = await axiosInstance.get("/users");
+          console.log("📦 response.data:", response.data);
 			set({ users: response.data });
 		} catch (error) {
 			console.log("🔥 Fetch users failed:", error);
@@ -46,15 +49,15 @@ export const useChatStore=create<ChatStore>((set,get)=>({
 	
     },
     initSocket: (userId) => {
-        console.log("INIT SOCKET for userId:", userId);
+     
         if(!get().isConnected){
             socket.auth = { userId };
              socket.connect();
 
              socket.emit("user_connected", userId);
-             console.log('User connected !!! userId:', userId);
+         
              socket.on( "users_online",(users:string[])=>{set({onlineUsers:new Set(users)})
-             console.log("Online korisnici stigli:", get().onlineUsers);
+          
             })
             
         }

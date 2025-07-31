@@ -40,8 +40,8 @@ app.use((req, res, next) => {
   next()
 })
 
+app.use(clerkMiddleware({ tokenKey: "authorization" }));
 
-app.use(clerkMiddleware)
 
 app.use("/api/auth",authRouter)
 app.use("/api/users",userRouter)
@@ -52,10 +52,6 @@ app.use("/api/stats",statsRouter)
 
 
 
-app.use((req, res, next) => {
-  console.log(`Request method: ${req.method}, url: ${req.url}`);
-  next();
-});
 
 
 httpServer.listen(PORT, () => {

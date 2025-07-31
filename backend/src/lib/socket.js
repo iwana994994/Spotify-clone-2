@@ -10,12 +10,12 @@ const userSockets= new Map();
 io.on("connection",(socket)=>{
 
     socket.on("user_connected",(userId)=>{
-          console.log('Backend received user_connected event,!!!! userId:', userId);
+      
         userSockets.set(userId,socket.id);
         
 
 io.emit("user_connected",userId);   
-console.log("Online korisnici stigli:", userSockets); // 
+
 socket.emit("users_online",Array.from(userSockets.keys()));
 
  }) 

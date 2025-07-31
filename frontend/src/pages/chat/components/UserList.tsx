@@ -1,18 +1,21 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useChatStore } from "@/stores/useChat"
+import { useUser } from "@clerk/clerk-react"
+import { useEffect } from "react"
 
 const UserList = () => {
   const { users, onlineUsers } = useChatStore()
 
- 
-
-  console.log("Svi onlineUsers iz seta:", [...onlineUsers]);
-console.log("Prvi korisnik clerkId:", users[0]?.clerkId);
-console.log("Drugi korisnik clerkId:", users[1]?.clerkId);
+  const {user}=useUser()
+  const{fetchUsers}=useChatStore()
 
 
-console.log("Prvi korisnik ceo objekat:", users[0]);
-console.log("Drugi korisnik ceo objekat:", users[1]);
+  useEffect(() => {
+     console.log("Pozivam fetchUsers");
+    if(user) fetchUsers()
+      
+  },[user,fetchUsers])
+
 
   return (
     <div className="border">

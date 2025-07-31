@@ -1,18 +1,23 @@
 import  User  from "../model/user.model.js";
 import Message from "../model/message.model.js";
-export const getAllUsers=async(req,res,next)=>{
+export const getAllUsers = async (req, res, next) => {
+    console.log("🚀 Ušao u getAllUsers");
+  try {
+    console.log("🚀 Pozvana getAllUsers funkcija!");
+    console.log("📌 req.auth:", req.auth);
 
-    try {
-         const users=await User.find({clerkId:{$ne:req.auth.userId}})
-          console.log("!!!!!!req.auth:", req.auth) 
-    res.json(users)
-    console.log("sending users",users);
-    } catch (error) {
-         console.error("🔥 Fetch users failed:", err)
-        next(error)        
-    }
-   
-}
+    const filter = req.auth?.userId ? { clerkId: { $ne: req.auth.userId } } : {};
+    console.log("🔍 Filter koji koristimo:", filter);
+
+    const users = await User.find(filter).select("fullName email clerkId");
+    console.log("🎯 Users iz baze:", users);
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("❌ Greska u getAllUsers:", error);
+    res.status(500).json({ message: "Greška u serveru" });
+  }
+};
 export const getMessages=async(req,res,next)=>{
     try {
 
