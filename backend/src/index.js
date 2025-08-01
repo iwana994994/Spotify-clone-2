@@ -17,7 +17,7 @@ import { connectDB } from "./lib/db.js";
 
 
 
-
+const dirname=path.resolve();
 dotenv.config();
 const PORT= process.env.PORT ;
 const app= express();
@@ -51,7 +51,12 @@ app.use("/api/albums",albumRouter)
 app.use("/api/stats",statsRouter)
 
 
-
+if( process.env.NODE_ENV==="production"){
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend","dist", "index.html"));
+  });
+}
 
 
 httpServer.listen(PORT, () => {
